@@ -6,23 +6,27 @@ Every screen, every mutation, and every renewal reminder works with zero network
 Currency conversion is the one feature that reaches the internet — and it degrades gracefully
 to cached or no conversion when it can't.
 
+| Dashboard | Add / Edit | Alerts | Settings |
+|:---:|:---:|:---:|:---:|
+| <img width="220" src="https://github.com/user-attachments/assets/5a5c577a-6c76-40ed-b092-bdff4ff6f473" alt="Dashboard"> | <img width="220" src="https://github.com/user-attachments/assets/b468b622-41e2-41fa-899b-af9c2d4e82a7" alt="Add / Edit"> | <img width="220" src="https://github.com/user-attachments/assets/f53b6fe9-69c8-438c-ad1b-2cd7abecf2d5" alt="Alerts"> | <img width="220" src="https://github.com/user-attachments/assets/42ed28b4-7192-4168-b90b-df426623d3fa" alt="Settings"> |
+
 ## Features
 
 - **Dashboard** — this month's total (cadence-normalized: yearly subscriptions contribute
   price ÷ 12, not the naive sticker price), annual total, active count, renewing-soon list,
-  and a sortable list of every subscription.<img width="1260" height="1804" alt="Screenshot_20260720_152216" src="https://github.com/user-attachments/assets/d6cfa861-273e-4d28-a535-c1328f224cb6" />
+  and a sortable list of every subscription.
 
 
 - **Upcoming** — a 7/30-day/all-time filtered, bucketed view of what's charging next.
-- **Add / Edit** — full CRUD with a category grid, billing-cadence toggle, and a real date<img width="1260" height="2463" alt="Screenshot_20260720_152247" src="https://github.com/user-attachments/assets/b468b622-41e2-41fa-899b-af9c2d4e82a7" />
+- **Add / Edit** — full CRUD with a category grid, billing-cadence toggle, and a real date
 
   picker (not free-text parsing). Editing autosaves as you go.
 - **Alerts** — every non-paused subscription's reminder, toggleable inline, with a "renews in
-  N days · absolute date · amount" line per row.<img width="1260" height="2459" alt="Screenshot_20260720_1522awd" src="https://github.com/user-attachments/assets/f53b6fe9-69c8-438c-ad1b-2cd7abecf2d5" />
+  N days · absolute date · amount" line per row.
 
 - **Settings** — dark mode (with a "follow system" default), high contrast, text size, larger
   tap targets, bold text, reduced motion, colorblind-safe labels, currency, and default
-  reminder lead time/time-of-day. Every toggle applies live, app-wide.<img width="1260" height="2455" alt="Screenshot_20260720_152331" src="https://github.com/user-attachments/assets/42ed28b4-7192-4168-b90b-df426623d3fa" />
+  reminder lead time/time-of-day. Every toggle applies live, app-wide.
 
 - **Currency conversion** — subscriptions billed in a currency other than your active one are
   converted into it for the dashboard totals, using a cached exchange rate fetched over HTTPS.

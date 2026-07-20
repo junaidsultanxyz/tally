@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Category labels (AGENTS.md §8 domain.model.Category) -->
+    <string name="category_entertainment">Entertainment</string>
+    <string name="category_music">Music</string>
+    <string name="category_productivity">AI</string>
+    <string name="category_storage">Storage</string>
+    <string name="category_fitness">Fitness</string>
+    <string name="category_news">News</string>
+    <string name="category_gaming">Gaming</string>
+    <string name="category_other">Other</string>
+
+    <!-- Status labels (AGENTS.md §8 domain.model.Status / StatusBadge default text) -->
+    <string name="status_active">Active</string>
+    <string name="status_due">Due</string>
+    <string name="status_overdue">Overdue</string>
+    <string name="status_paused">Paused</string>
+    <string name="status_trial">Trial</string>
+
+    <!-- SubscriptionRow delete button accessible label (IMPLEMENTATION_PLAN.md Phase 2.5) -->
+    <string name="subscription_row_delete">Delete %1$s</string>
+
+    <!-- Compact status-badge labels — rows have no separate due-text subline (Phase 0.3
+         removed it), so timing is folded into the badge itself, matching the kit's own
+         "● Due 3d" pill pattern (subscriptions.card.html). Deliberately not full plurals:
+         "3d" is a fixed UI abbreviation, not natural-language pluralization. -->
+    <string name="status_badge_due_today">Due today</string>
+    <string name="status_badge_due_tomorrow">Due tomorrow</string>
+    <string name="status_badge_due_days">Due %1$dd</string>
+    <string name="status_badge_overdue_days">Overdue %1$dd</string>
+    <string name="status_badge_trial_days">Trial %1$dd</string>
+
+    <!-- Bottom nav bar (IMPLEMENTATION_PLAN.md Phase 0.5) -->
+    <string name="nav_home">Home</string>
+    <string name="nav_upcoming">Upcoming</string>
+    <string name="nav_add">Add subscription</string>
+    <string name="nav_alerts">Alerts</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Dashboard (Phase 2.2) -->
+    <string name="dashboard_title">Your subscriptions</string>
+    <string name="dashboard_notifications">Notifications</string>
+    <string name="dashboard_hero_label">Total this month</string>
+    <string name="dashboard_hero_annual_suffix">%1$s/yr</string>
+    <string name="dashboard_stat_upcoming_label">Upcoming</string>
+    <string name="dashboard_stat_vs_last_month_label">vs last month</string>
+    <string name="dashboard_cause_price_rise">%1$s price rise</string>
+    <string name="dashboard_cause_price_drop">%1$s price drop</string>
+    <string name="dashboard_renewing_soon_header">Renewing soon</string>
+    <string name="dashboard_all_subscriptions_header">All subscriptions</string>
+    <string name="dashboard_sort">Sort</string>
+    <string name="dashboard_sort_next_charge">Next charge</string>
+    <string name="dashboard_sort_price_high_low">Price: high to low</string>
+    <string name="dashboard_sort_name_a_z">Name: A to Z</string>
+    <string name="dashboard_see_all">See all</string>
+    <string name="dashboard_empty_renewing_soon">No renewals in the next week 🎉</string>
+    <string name="dashboard_empty_no_subscriptions">No subscriptions yet — tap + to add one.</string>
+
+    <!-- Upcoming (Phase 2.3) -->
+    <string name="upcoming_title">Next 30 days</string>
+    <string name="upcoming_subtitle">Upcoming charges</string>
+    <string name="upcoming_filter_week">This week</string>
+    <string name="upcoming_filter_month">This month</string>
+    <string name="upcoming_filter_all">All</string>
+    <string name="upcoming_bucket_this_week">This week</string>
+    <string name="upcoming_bucket_next_week">Next week</string>
+    <string name="upcoming_bucket_later_this_month">Later this month</string>
+    <string name="upcoming_empty">Nothing charging in this window 🎉</string>
+
+    <!-- Add (Phase 2.4) -->
+    <string name="add_greeting">New subscription</string>
+    <string name="add_title">Add subscription</string>
+    <string name="add_name_label">Name</string>
+    <string name="add_name_placeholder">e.g. Netflix</string>
+    <string name="add_name_error_required">Name is required</string>
+    <string name="add_price_label">Price</string>
+    <string name="add_billing_label">Billing</string>
+    <string name="add_cadence_monthly">Monthly</string>
+    <string name="add_cadence_yearly">Yearly</string>
+    <string name="add_category_label">Category</string>
+    <!-- Short form for the category grid tile only (categoryLabel's full "Entertainment"
+         truncates in a 4-column grid) — matches the kit's own "Fun" abbreviation for this tile. -->
+    <string name="add_category_grid_entertainment">Fun</string>
+    <string name="add_first_billing_date_label">First billing date</string>
+    <string name="add_first_billing_date_placeholder">Select a date</string>
+    <string name="add_first_billing_date_error_required">Date is required</string>
+    <string name="add_reminder_label">Remind me before renewal</string>
+    <string name="add_reminder_caption">Get an alert %1$d days ahead.</string>
+    <string name="add_submit">Add subscription</string>
+    <string name="add_close">Close</string>
+    <string name="add_date_picker_confirm">OK</string>
+    <string name="add_date_picker_cancel">Cancel</string>
+
+    <!-- Edit sheet (Phase 2.5) -->
+    <string name="edit_dialog_label">Edit subscription</string>
+    <string name="edit_next_charge_label">Next renewal date</string>
+    <string name="edit_status_label">Status</string>
+    <string name="edit_save">Save</string>
+    <string name="edit_delete">Delete</string>
+
+    <!-- Alerts (Phase 2.6) -->
+    <string name="alerts_title">Stay ahead of charges</string>
+    <string name="alerts_subtitle">Reminders</string>
+    <string name="alerts_then_amount">then %1$s</string>
+    <string name="alerts_empty">No reminders are turned on yet.</string>
+    <!-- "Renews in 3 days" · "Jul 23, 2026" · "$15.49" -->
+    <string name="alerts_row_subline">%1$s · %2$s · %3$s</string>
+    <string name="alerts_reminder_switch_label">Reminder for %1$s</string>
+
+    <!-- Settings (Phase 2.7) -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_appearance">Appearance</string>
+    <string name="settings_dark_mode">Dark mode</string>
+    <string name="settings_dark_mode_follow_system">Follow system</string>
+    <string name="settings_high_contrast">High contrast</string>
+    <string name="settings_section_regional">Regional</string>
+    <string name="settings_currency">Currency</string>
+    <string name="settings_currency_display">%1$s · %2$s</string>
+    <string name="settings_section_text_touch">Text &amp; touch</string>
+    <string name="settings_text_size">Text size</string>
+    <string name="settings_text_size_a">A</string>
+    <string name="settings_text_size_a_plus">A+</string>
+    <string name="settings_text_size_a_plus_plus">A++</string>
+    <string name="settings_large_tap_targets">Larger tap targets</string>
+    <string name="settings_bold_text">Bold text</string>
+    <string name="settings_section_motion_vision">Motion &amp; vision</string>
+    <string name="settings_reduce_motion">Reduce motion</string>
+    <string name="settings_colorblind_labels">Colorblind-safe labels</string>
+    <string name="settings_section_reminders">Reminders</string>
+    <string name="settings_default_lead_days">Default reminder lead time</string>
+    <string name="settings_lead_days_decrease">Decrease lead time</string>
+    <string name="settings_lead_days_increase">Increase lead time</string>
+    <string name="settings_default_reminder_time">Default reminder time</string>
+    <string name="settings_section_account">Account</string>
+    <string name="settings_account_placeholder">Sign in coming in a future update</string>
+</resources>

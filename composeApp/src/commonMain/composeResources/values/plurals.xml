@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="active_subscriptions_count">
+        <item quantity="one">across %1$d active subscription</item>
+        <item quantity="other">across %1$d active subscriptions</item>
+    </plurals>
+
+    <plurals name="due_in_days">
+        <item quantity="one">in %1$d day</item>
+        <item quantity="other">in %1$d days</item>
+    </plurals>
+
+    <plurals name="trial_ends_in_days">
+        <item quantity="one">Trial ends in %1$d day</item>
+        <item quantity="other">Trial ends in %1$d days</item>
+    </plurals>
+
+    <plurals name="overdue_by_days">
+        <item quantity="one">overdue by %1$d day</item>
+        <item quantity="other">overdue by %1$d days</item>
+    </plurals>
+
+    <plurals name="renews_in_days">
+        <item quantity="one">Renews in %1$d day</item>
+        <item quantity="other">Renews in %1$d days</item>
+    </plurals>
+
+    <plurals name="reminder_footer_lead_days">
+        <item quantity="one">You'll get a push notification %1$d day before each renewal.</item>
+        <item quantity="other">You'll get a push notification %1$d days before each renewal.</item>
+    </plurals>
+
+    <plurals name="settings_lead_days_value">
+        <item quantity="one">%1$d day</item>
+        <item quantity="other">%1$d days</item>
+    </plurals>
+</resources>

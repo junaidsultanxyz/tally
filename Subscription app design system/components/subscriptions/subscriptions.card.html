@@ -1,0 +1,44 @@
+<!-- @dsCard group="Components" viewport="700x260" name="Subscriptions — Row, SummaryStat, Card" subtitle="Domain components for the app" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+ html,body{margin:0;background:var(--bg-app);color:var(--text-primary);font-family:var(--font-sans)}
+ .wrap{padding:20px}
+ .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+ .lbl{font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.04em;font-weight:600;width:100%;margin-top:4px}
+ .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-sans);font-weight:600;border-radius:var(--radius-pill);cursor:pointer;min-height:44px;padding:0 20px;font-size:15px;border:1.5px solid transparent}
+ .pill{display:inline-flex;align-items:center;gap:5px;border-radius:var(--radius-pill);padding:3px 10px;font-size:13px;font-weight:600}
+</style></head><body><div class="wrap">
+<div class="row" style="gap:28px">
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <span style="font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.02em">This month</span>
+    <span style="font-size:24px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums">$142.97</span>
+    <span style="font-size:13px;color:var(--text-tertiary)">across 9 subscriptions</span>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:4px">
+    <span style="font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.02em">Upcoming</span>
+    <span style="font-size:24px;font-weight:700;font-variant-numeric:tabular-nums">3</span>
+    <span style="font-size:13px;color:var(--text-tertiary)">renewals in 7 days</span>
+  </div>
+</div>
+<div class="lbl">Subscription rows</div>
+<div style="background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-xl);padding:6px 16px;max-width:420px;box-shadow:var(--shadow-xs)">
+  
+  <div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border-subtle)">
+    <span style="width:44px;height:44px;border-radius:var(--radius-md);background:var(--accent-soft);color:var(--accent-soft-fg);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px">N</span>
+    <span style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="display:flex;align-items:center;gap:8px"><span style="font-weight:600">Netflix</span><span class="pill" style="background:var(--warning-bg);color:var(--warning-fg)">● Due 3d</span></span><span style="font-size:13px;color:var(--text-tertiary)">Entertainment</span></span>
+    <span style="text-align:right;font-variant-numeric:tabular-nums"><span style="font-weight:600">$15.49</span><span style="display:block;font-size:11px;color:var(--text-tertiary)">/mo</span></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border-subtle)">
+    <span style="width:44px;height:44px;border-radius:var(--radius-md);background:var(--accent-soft);color:var(--accent-soft-fg);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px">S</span>
+    <span style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="display:flex;align-items:center;gap:8px"><span style="font-weight:600">Spotify</span><span class="pill" style="background:var(--success-bg);color:var(--success-fg)">✓ Active</span></span><span style="font-size:13px;color:var(--text-tertiary)">Music</span></span>
+    <span style="text-align:right;font-variant-numeric:tabular-nums"><span style="font-weight:600">$11.99</span><span style="display:block;font-size:11px;color:var(--text-tertiary)">/mo</span></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border-subtle)">
+    <span style="width:44px;height:44px;border-radius:var(--radius-md);background:var(--accent-soft);color:var(--accent-soft-fg);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px">G</span>
+    <span style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="display:flex;align-items:center;gap:8px"><span style="font-weight:600">iCloud+</span><span class="pill" style="background:var(--info-bg);color:var(--info-fg)">‖ Paused</span></span><span style="font-size:13px;color:var(--text-tertiary)">Storage</span></span>
+    <span style="text-align:right;font-variant-numeric:tabular-nums"><span style="font-weight:600">$2.99</span><span style="display:block;font-size:11px;color:var(--text-tertiary)">/mo</span></span>
+  </div>
+</div>
+</div></body></html>

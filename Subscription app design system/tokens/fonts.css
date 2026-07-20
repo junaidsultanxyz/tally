@@ -1,0 +1,10 @@
+/* Figtree — friendly, geometric, highly legible. Loaded from Google Fonts CDN.
+   SUBSTITUTION FLAG: no brand font was provided, so Figtree is used as the system face.
+   For production, self-host and add real @font-face rules here. */
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+
+:root {
+  --font-sans: "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Amounts / figures use the same face with tabular numerals for alignment. */
+  --font-numeric: "Figtree", ui-sans-serif, system-ui, sans-serif;
+}

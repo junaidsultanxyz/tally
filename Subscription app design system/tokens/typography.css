@@ -1,0 +1,27 @@
+/* ===== Typography =====
+   All sizes scale with --type-scale (Dynamic Type). Default 1; accessibility.css raises it. */
+:root {
+  --type-scale: 1;
+
+  --fs-display:  calc(32px * var(--type-scale));
+  --fs-title:    calc(24px * var(--type-scale));
+  --fs-headline: calc(20px * var(--type-scale));
+  --fs-body-lg:  calc(17px * var(--type-scale));
+  --fs-body:     calc(15px * var(--type-scale));
+  --fs-callout:  calc(14px * var(--type-scale));
+  --fs-caption:  calc(13px * var(--type-scale));
+  --fs-micro:    calc(12px * var(--type-scale));
+
+  --lh-tight:  1.15;
+  --lh-snug:   1.3;
+  --lh-normal: 1.5;
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.02em;
+}

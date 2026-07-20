@@ -1,0 +1,34 @@
+<!-- @dsCard group="Colors" viewport="700x170" name="Semantic colors" subtitle="Always paired with icon + label — never color alone" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  html,body{margin:0;background:var(--bg-app);color:var(--text-primary);font-family:var(--font-sans);}
+  .wrap{padding:18px 20px;}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .col{display:flex;flex-direction:column;gap:10px;}
+  .lbl{font-size:11px;color:var(--text-tertiary);letter-spacing:.04em;text-transform:uppercase;font-weight:600;}
+  
+</style>
+</head>
+<body><div class="wrap"><div class="row">
+   <div class="col" style="gap:6px;align-items:center;padding:10px 14px;border-radius:var(--radius-md);background:var(--success-bg);min-width:96px">
+     <div style="font-size:20px;line-height:1;color:var(--success-fg)">✓</div>
+     <div style="font-weight:700;color:var(--success-fg);font-size:13px">Success</div>
+   </div>
+   <div class="col" style="gap:6px;align-items:center;padding:10px 14px;border-radius:var(--radius-md);background:var(--warning-bg);min-width:96px">
+     <div style="font-size:20px;line-height:1;color:var(--warning-fg)">!</div>
+     <div style="font-weight:700;color:var(--warning-fg);font-size:13px">Warning</div>
+   </div>
+   <div class="col" style="gap:6px;align-items:center;padding:10px 14px;border-radius:var(--radius-md);background:var(--danger-bg);min-width:96px">
+     <div style="font-size:20px;line-height:1;color:var(--danger-fg)">✕</div>
+     <div style="font-weight:700;color:var(--danger-fg);font-size:13px">Danger</div>
+   </div>
+   <div class="col" style="gap:6px;align-items:center;padding:10px 14px;border-radius:var(--radius-md);background:var(--info-bg);min-width:96px">
+     <div style="font-size:20px;line-height:1;color:var(--info-fg)">i</div>
+     <div style="font-weight:700;color:var(--info-fg);font-size:13px">Info</div>
+   </div></div></div></body>
+</html>

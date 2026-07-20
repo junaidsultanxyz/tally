@@ -1,0 +1,23 @@
+<!-- @dsCard group="Type" viewport="700x140" name="Numerals (tabular)" subtitle="Amounts use tabular-nums so columns align" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  html,body{margin:0;background:var(--bg-app);color:var(--text-primary);font-family:var(--font-sans);}
+  .wrap{padding:18px 20px;}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+  .col{display:flex;flex-direction:column;gap:10px;}
+  .lbl{font-size:11px;color:var(--text-tertiary);letter-spacing:.04em;text-transform:uppercase;font-weight:600;}
+  
+</style>
+</head>
+<body><div class="wrap"><div class="col" style="font-variant-numeric:tabular-nums;font-weight:600">
+   <div style="font-size:30px;letter-spacing:-.01em">$142.97 <span style="color:var(--text-tertiary);font-size:15px;font-weight:500">/mo</span></div>
+   <div style="font-size:16px;color:var(--text-secondary);display:flex;flex-direction:column;gap:2px">
+     <span>$ 9.99</span><span>$14.99</span><span>$119.00</span>
+   </div>
+ </div></div></body>
+</html>

@@ -1,0 +1,37 @@
+<!-- @dsCard group="Components" viewport="700x270" name="Forms — TextField, Switch" subtitle="Labelled inputs and accessible toggles" -->
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+ html,body{margin:0;background:var(--bg-app);color:var(--text-primary);font-family:var(--font-sans)}
+ .wrap{padding:20px}
+ .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+ .lbl{font-size:11px;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:.04em;font-weight:600;width:100%;margin-top:4px}
+ .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-sans);font-weight:600;border-radius:var(--radius-pill);cursor:pointer;min-height:44px;padding:0 20px;font-size:15px;border:1.5px solid transparent}
+ .pill{display:inline-flex;align-items:center;gap:5px;border-radius:var(--radius-pill);padding:3px 10px;font-size:13px;font-weight:600}
+</style></head><body><div class="wrap">
+<div class="row" style="align-items:flex-start;gap:20px">
+  <label style="display:flex;flex-direction:column;gap:6px;flex:1;min-width:200px">
+    <span style="font-size:14px;font-weight:600;color:var(--text-secondary)">Monthly price</span>
+    <span style="display:flex;align-items:center;gap:8px;background:var(--bg-surface);border:1.5px solid var(--border-default);border-radius:var(--radius-md);padding:0 14px;min-height:44px">
+      <span style="color:var(--text-tertiary);font-weight:600">$</span>
+      <span style="color:var(--text-primary);font-size:15px">15.49</span></span>
+  </label>
+  <label style="display:flex;flex-direction:column;gap:6px;flex:1;min-width:200px">
+    <span style="font-size:14px;font-weight:600;color:var(--text-secondary)">Name</span>
+    <span style="display:flex;align-items:center;background:var(--bg-surface);border:1.5px solid var(--danger-fg);border-radius:var(--radius-md);padding:0 14px;min-height:44px;color:var(--text-tertiary);font-size:15px">Required</span>
+    <span style="font-size:13px;color:var(--danger-fg)">This field is required</span>
+  </label>
+</div>
+<div class="lbl">Switch (role="switch")</div>
+<div class="row" style="flex-direction:column;align-items:stretch;gap:14px;max-width:340px">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+    <span style="display:flex;flex-direction:column"><span style="font-weight:500">High contrast</span><span style="font-size:13px;color:var(--text-tertiary)">Stronger text and borders</span></span>
+    <span style="width:52px;height:32px;border-radius:999px;background:var(--accent);padding:3px;box-sizing:border-box"><span style="display:block;width:26px;height:26px;border-radius:50%;background:#fff;margin-left:20px;box-shadow:var(--shadow-sm)"></span></span>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+    <span style="font-weight:500">Reduce motion</span>
+    <span style="width:52px;height:32px;border-radius:999px;background:var(--border-strong);padding:3px;box-sizing:border-box"><span style="display:block;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:var(--shadow-sm)"></span></span>
+  </div>
+</div>
+</div></body></html>

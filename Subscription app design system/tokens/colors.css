@@ -1,0 +1,118 @@
+/* ===== Tally color system =====
+   Warm-sage accent on warm-neutral surfaces. Muted, never brutal.
+   Light is default; [data-theme="dark"] overrides. High-contrast handled in accessibility.css.
+   COLORBLIND SAFETY: status is NEVER encoded by color alone — always pair with an icon + label. */
+
+:root {
+  /* --- Warm sage accent ramp (primary) --- */
+  --sage-50:  oklch(0.968 0.018 150);
+  --sage-100: oklch(0.930 0.030 150);
+  --sage-200: oklch(0.875 0.045 150);
+  --sage-300: oklch(0.800 0.055 150);
+  --sage-400: oklch(0.720 0.062 150);
+  --sage-500: oklch(0.640 0.066 150);
+  --sage-600: oklch(0.555 0.062 150);
+  --sage-700: oklch(0.465 0.052 150);
+  --sage-800: oklch(0.385 0.040 150);
+  --sage-900: oklch(0.310 0.030 150);
+
+  /* --- Warm apricot secondary (friendly highlight) --- */
+  --apricot-100: oklch(0.940 0.040 70);
+  --apricot-300: oklch(0.860 0.075 68);
+  --apricot-500: oklch(0.790 0.095 66);
+  --apricot-700: oklch(0.640 0.090 60);
+
+  /* --- Warm neutral gray ramp --- */
+  --neutral-0:   oklch(1 0 0);
+  --neutral-25:  oklch(0.990 0.003 95);
+  --neutral-50:  oklch(0.978 0.004 95);
+  --neutral-100: oklch(0.958 0.005 95);
+  --neutral-200: oklch(0.922 0.006 95);
+  --neutral-300: oklch(0.878 0.006 95);
+  --neutral-400: oklch(0.760 0.007 95);
+  --neutral-500: oklch(0.630 0.008 95);
+  --neutral-600: oklch(0.520 0.008 95);
+  --neutral-700: oklch(0.400 0.008 95);
+  --neutral-800: oklch(0.300 0.007 95);
+  --neutral-900: oklch(0.220 0.006 95);
+  --neutral-950: oklch(0.170 0.006 95);
+
+  /* --- Semantic hues (muted, colorblind-paired with icons) --- */
+  --success-fg:  oklch(0.520 0.110 150);
+  --success-bg:  oklch(0.940 0.035 150);
+  --warning-fg:  oklch(0.560 0.110 70);
+  --warning-bg:  oklch(0.945 0.050 78);
+  --danger-fg:   oklch(0.560 0.140 25);
+  --danger-bg:   oklch(0.950 0.035 28);
+  --info-fg:     oklch(0.540 0.090 245);
+  --info-bg:     oklch(0.945 0.030 245);
+
+  /* ===== Semantic aliases — LIGHT (default) ===== */
+  --bg-app:       var(--neutral-50);
+  --bg-surface:   var(--neutral-0);
+  --bg-elevated:  var(--neutral-0);
+  --bg-sunken:    var(--neutral-100);
+  --bg-hover:     var(--neutral-100);
+  --bg-active:    var(--neutral-200);
+
+  --text-primary:   var(--neutral-900);
+  --text-secondary: var(--neutral-600);
+  --text-tertiary:  var(--neutral-500);
+  --text-on-accent: var(--neutral-0);
+  --text-disabled:  var(--neutral-400);
+
+  --border-subtle:  var(--neutral-200);
+  --border-default: var(--neutral-300);
+  --border-strong:  var(--neutral-400);
+
+  --accent:          var(--sage-600);
+  --accent-hover:    var(--sage-700);
+  --accent-pressed:  var(--sage-800);
+  --accent-soft:     var(--sage-100);
+  --accent-soft-fg:  var(--sage-800);
+  --accent-ring:     oklch(0.640 0.066 150 / 0.40);
+
+  --focus-ring: var(--sage-600);
+
+  color-scheme: light;
+}
+
+/* ===== DARK ===== */
+[data-theme="dark"] {
+  --bg-app:       var(--neutral-950);
+  --bg-surface:   var(--neutral-900);
+  --bg-elevated:  oklch(0.255 0.007 95);
+  --bg-sunken:    var(--neutral-950);
+  --bg-hover:     oklch(0.280 0.008 95);
+  --bg-active:    oklch(0.330 0.008 95);
+
+  --text-primary:   var(--neutral-50);
+  --text-secondary: var(--neutral-400);
+  --text-tertiary:  var(--neutral-500);
+  --text-on-accent: var(--neutral-950);
+  --text-disabled:  var(--neutral-600);
+
+  --border-subtle:  oklch(0.300 0.007 95);
+  --border-default: oklch(0.350 0.008 95);
+  --border-strong:  oklch(0.440 0.008 95);
+
+  --accent:          var(--sage-400);
+  --accent-hover:    var(--sage-300);
+  --accent-pressed:  var(--sage-200);
+  --accent-soft:     oklch(0.330 0.040 150);
+  --accent-soft-fg:  var(--sage-200);
+  --accent-ring:     oklch(0.720 0.062 150 / 0.45);
+
+  --focus-ring: var(--sage-400);
+
+  --success-fg:  oklch(0.780 0.100 150);
+  --success-bg:  oklch(0.330 0.045 150);
+  --warning-fg:  oklch(0.820 0.100 78);
+  --warning-bg:  oklch(0.340 0.050 78);
+  --danger-fg:   oklch(0.760 0.120 28);
+  --danger-bg:   oklch(0.330 0.055 28);
+  --info-fg:     oklch(0.760 0.080 245);
+  --info-bg:     oklch(0.320 0.045 245);
+
+  color-scheme: dark;
+}

@@ -1,0 +1,65 @@
+/* ===== Accessibility modes =====
+   Toggle via data attributes on <html> or a container.
+   These are additive layers on top of theme (light/dark). */
+
+/* Dynamic Type — text size scaling.
+   The size tokens are re-declared on the scoped element so they recompute against the
+   LOCAL --type-scale — this makes scaling work when the attribute is set on an app
+   container (e.g. the app root / a screen), not only on :root. */
+[data-text-size] {
+  --fs-display:  calc(32px * var(--type-scale));
+  --fs-title:    calc(24px * var(--type-scale));
+  --fs-headline: calc(20px * var(--type-scale));
+  --fs-body-lg:  calc(17px * var(--type-scale));
+  --fs-body:     calc(15px * var(--type-scale));
+  --fs-callout:  calc(14px * var(--type-scale));
+  --fs-caption:  calc(13px * var(--type-scale));
+  --fs-micro:    calc(12px * var(--type-scale));
+}
+[data-text-size="large"]      { --type-scale: 1.15; }
+[data-text-size="x-large"]    { --type-scale: 1.30; }
+[data-text-size="xx-large"]   { --type-scale: 1.50; }
+
+/* Larger tap targets */
+[data-tap="large"] { --tap-min: 52px; --gutter: 24px; }
+
+/* High contrast — pushes text/borders to the extremes, strengthens accent */
+[data-contrast="high"] {
+  --text-primary: var(--neutral-950);
+  --text-secondary: var(--neutral-800);
+  --text-tertiary: var(--neutral-700);
+  --border-subtle: var(--neutral-400);
+  --border-default: var(--neutral-500);
+  --border-strong: var(--neutral-700);
+  --accent: var(--sage-700);
+  --accent-hover: var(--sage-800);
+  --accent-soft-fg: var(--sage-900);
+}
+[data-theme="dark"][data-contrast="high"] {
+  --text-primary: var(--neutral-0);
+  --text-secondary: var(--neutral-200);
+  --text-tertiary: var(--neutral-300);
+  --border-subtle: var(--neutral-500);
+  --border-default: var(--neutral-400);
+  --border-strong: var(--neutral-300);
+  --accent: var(--sage-300);
+  --accent-hover: var(--sage-200);
+  --accent-soft: oklch(0.360 0.050 150);
+  --accent-soft-fg: var(--sage-100);
+}
+
+/* Focus ring — always visible for keyboard users */
+:root { --focus-ring-width: 3px; --focus-ring-offset: 2px; }
+[data-contrast="high"] { --focus-ring-width: 4px; }
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+[data-motion="reduced"] *, [data-motion="reduced"] *::before, [data-motion="reduced"] *::after {
+  animation-duration: 0.001ms !important;
+  transition-duration: 0.001ms !important;
+}

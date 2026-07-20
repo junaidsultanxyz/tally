@@ -1,0 +1,593 @@
+<!-- @dsCard group="Tally App" viewport="900x760" subtitle="Interactive subscription manager — dark/light + live accessibility controls" -->
+<!-- @startingPoint section="Tally App" subtitle="Full mobile app: dashboard, upcoming, add, alerts, accessibility settings" viewport="900x760" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tally — Subscription Manager</title>
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--neutral-200);
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    gap: 40px; padding: 40px; flex-wrap: wrap;
+    color: var(--text-primary);
+  }
+  [data-theme="dark"] ~ * , body:has(#phone[data-theme="dark"]) { }
+
+  /* ---- Phone frame ---- */
+  .phone {
+    width: 390px; height: 780px; flex-shrink: 0;
+    background: var(--bg-app);
+    border-radius: 44px;
+    border: 10px solid var(--neutral-950);
+    box-shadow: 0 40px 80px -20px oklch(0.3 0.02 95 / .45);
+    overflow: hidden; position: relative;
+    display: flex; flex-direction: column;
+    transition: background .3s ease;
+    color: var(--text-primary);
+  }
+  .notch { position:absolute; top:0; left:50%; transform:translateX(-50%); width:130px; height:28px;
+    background: var(--neutral-950); border-radius: 0 0 18px 18px; z-index: 60; }
+  .statusbar { height: 52px; flex-shrink:0; display:flex; align-items:flex-end; justify-content:space-between;
+    padding: 0 26px 6px; font-size: 13px; font-weight: 700; color: var(--text-primary); }
+  .statusbar .icons { display:flex; gap:6px; align-items:center; }
+
+  .screen-scroll { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
+  .screen-scroll::-webkit-scrollbar { width: 0; }
+  .screen { display: none; padding: 0 var(--gutter) 120px; }
+  .screen.active { display: block; }
+
+  .app-header { display:flex; align-items:center; justify-content:space-between; padding: 8px 0 18px; }
+  .greeting { font-size: var(--fs-caption); color: var(--text-tertiary); font-weight:600; }
+  .app-title { font-size: var(--fs-title); font-weight: 800; letter-spacing: -.02em; line-height:1.1; }
+
+  .icon-btn { display:inline-flex; align-items:center; justify-content:center; min-width:var(--tap-min);
+    min-height:var(--tap-min); border-radius: var(--radius-md); border:none; background: transparent;
+    color: var(--text-secondary); cursor:pointer; }
+  .icon-btn.soft { background: var(--accent-soft); color: var(--accent-soft-fg); width:44px; height:44px; }
+  .icon-btn svg { width:22px; height:22px; }
+
+  .hero-card { background: var(--accent); color: var(--text-on-accent); border-radius: var(--radius-2xl);
+    padding: var(--space-6); box-shadow: var(--shadow-md); margin-bottom: var(--space-5);
+    position: relative; overflow: hidden; }
+  .hero-card .ring { position:absolute; right:-40px; top:-40px; width:160px; height:160px; border-radius:50%;
+    background: oklch(1 0 0 / .10); }
+  .hero-card .ring2 { position:absolute; right:20px; top:60px; width:90px; height:90px; border-radius:50%;
+    background: oklch(1 0 0 / .08); }
+  .hero-label { font-size: var(--fs-caption); font-weight:700; opacity:.85; text-transform:uppercase; letter-spacing:.04em; }
+  .hero-amount { font-size: 46px; font-weight: 800; letter-spacing:-.02em; font-variant-numeric: tabular-nums; line-height:1.05; margin-top:6px; }
+  .hero-sub { font-size: var(--fs-callout); opacity:.9; margin-top:6px; font-weight:500; }
+
+  .stat-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom: var(--space-6); }
+  .stat { background: var(--bg-surface); border:1px solid var(--border-subtle); border-radius: var(--radius-lg);
+    padding: 14px 16px; box-shadow: var(--shadow-xs); }
+  .stat .k { font-size: var(--fs-micro); font-weight:700; color: var(--text-secondary); text-transform:uppercase; letter-spacing:.03em; display:flex; align-items:center; gap:5px;}
+  .stat .k svg { width:14px; height:14px; }
+  .stat .v { font-size: var(--fs-headline); font-weight:800; margin-top:6px; font-variant-numeric:tabular-nums; }
+  .stat .s { font-size: var(--fs-micro); color: var(--text-tertiary); margin-top:2px; }
+
+  .section-head { display:flex; align-items:center; justify-content:space-between; margin: var(--space-6) 0 var(--space-3); }
+  .section-head h2 { font-size: var(--fs-headline); font-weight:700; margin:0; }
+  .section-head a { font-size: var(--fs-callout); color: var(--accent); font-weight:600; text-decoration:none; }
+
+  .list-card { background: var(--bg-surface); border:1px solid var(--border-subtle); border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xs); padding: 4px var(--space-5); }
+  .sub-row { display:flex; align-items:center; gap:14px; padding: 13px 0; width:100%; background:none; border:none;
+    text-align:left; cursor:pointer; min-height: var(--tap-min); font-family:inherit; color:inherit;
+    border-bottom: 1px solid var(--border-subtle); }
+  .sub-row:last-child { border-bottom:none; }
+  .mono { flex-shrink:0; width:44px; height:44px; border-radius: var(--radius-md); display:flex; align-items:center;
+    justify-content:center; font-weight:800; font-size:18px; }
+  .sub-mid { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+  .sub-name-line { display:flex; align-items:center; gap:8px; }
+  .sub-name { font-size: var(--fs-body); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sub-cat { font-size: var(--fs-caption); color: var(--text-tertiary); }
+  .sub-amt { flex-shrink:0; text-align:right; font-variant-numeric: tabular-nums; }
+  .sub-amt b { font-size: var(--fs-body); font-weight:700; }
+  .sub-amt span { display:block; font-size: var(--fs-micro); color: var(--text-tertiary); }
+  .del-btn { flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; min-width:40px;
+    border:none; background:transparent; color: var(--text-tertiary); cursor:pointer; border-radius: var(--radius-sm); margin-left:2px; transition: background .15s; }
+  .del-btn:hover, .del-btn:focus-visible { background: var(--danger-bg); color: var(--danger-fg); }
+  .del-btn svg { width:18px; height:18px; }
+
+  /* Edit bottom sheet */
+  .sheet-scrim { position:absolute; inset:0; z-index:80; background: oklch(0.2 0.02 95 / .45);
+    display:none; align-items:flex-end; }
+  .sheet-scrim.open { display:flex; }
+  .sheet { width:100%; max-height:88%; overflow-y:auto; background: var(--bg-app);
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0; padding: 10px var(--gutter) calc(20px + var(--safe-bottom));
+    box-shadow: 0 -12px 40px oklch(0.2 0.02 95 / .3); transform: translateY(100%); transition: transform .28s cubic-bezier(.32,.72,0,1); }
+  .sheet-scrim.open .sheet { transform: translateY(0); }
+  .sheet-grabber { width:40px; height:5px; border-radius:999px; background: var(--border-strong); margin: 4px auto 14px; }
+  .sheet-head { display:flex; align-items:center; gap:12px; margin-bottom: var(--space-5); }
+  .sheet-head .title { flex:1; font-size: var(--fs-headline); font-weight:800; }
+  .sheet .status-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .sheet .status-opt { display:flex; align-items:center; justify-content:center; gap:5px; padding:10px 4px; border-radius: var(--radius-md);
+    border:1.5px solid var(--border-default); background: var(--bg-surface); cursor:pointer; font-family:inherit; font-size: var(--fs-caption); font-weight:700; color: var(--text-secondary); }
+  .sheet .status-opt svg { width:14px; height:14px; }
+  .sheet .status-opt.on { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-soft-fg); }
+
+  .pill { display:inline-flex; align-items:center; gap:4px; border-radius: var(--radius-pill); padding: 2px 9px;
+    font-size: var(--fs-micro); font-weight:700; line-height:1.3; }
+  .pill svg { width:11px; height:11px; }
+
+  /* Segmented */
+  .seg { display:flex; gap:2px; padding:3px; background: var(--bg-sunken); border-radius: var(--radius-md); margin-bottom: var(--space-5); }
+  .seg button { flex:1; border:none; cursor:pointer; min-height:38px; border-radius: calc(var(--radius-md) - 3px);
+    font-family:inherit; font-size: var(--fs-callout); font-weight:600; background:transparent; color: var(--text-secondary); transition: all .15s; }
+  .seg button.on { background: var(--bg-surface); color: var(--text-primary); box-shadow: var(--shadow-xs); }
+  #cad-seg button { padding: 0 8px; font-size: var(--fs-caption); }
+
+  /* Timeline (upcoming) */
+  .day-group { margin-bottom: var(--space-5); }
+  .day-label { font-size: var(--fs-caption); font-weight:700; color: var(--text-secondary); text-transform:uppercase;
+    letter-spacing:.04em; margin: 0 0 8px 2px; }
+
+  /* Forms */
+  .field { display:flex; flex-direction:column; gap:6px; margin-bottom: var(--space-5); }
+  .field > label { font-size: var(--fs-callout); font-weight:600; color: var(--text-secondary); }
+  .input { display:flex; align-items:center; gap:8px; background: var(--bg-surface);
+    border:1.5px solid var(--border-default); border-radius: var(--radius-md); padding: 0 14px; min-height: var(--tap-min); }
+  .input input, .input select { flex:1; border:none; outline:none; background:transparent; font-family:inherit;
+    font-size: var(--fs-body); color: var(--text-primary); min-height: 42px; }
+  .input .prefix { color: var(--text-tertiary); font-weight:700; }
+  .cat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .cat { display:flex; flex-direction:column; align-items:center; gap:6px; padding:12px 4px; border-radius: var(--radius-md);
+    border:1.5px solid var(--border-default); background: var(--bg-surface); cursor:pointer; font-size: var(--fs-micro); font-weight:600; color: var(--text-secondary); }
+  .cat svg { width:20px; height:20px; }
+  .cat.on { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-soft-fg); }
+
+  .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; font-family:inherit; font-weight:700;
+    border-radius: var(--radius-pill); cursor:pointer; border:1.5px solid transparent; min-height: 52px; font-size: var(--fs-body-lg); width:100%; }
+  .btn-primary { background: var(--accent); color: var(--text-on-accent); }
+  .btn svg { width:20px; height:20px; }
+
+  /* Settings rows */
+  .setting-group { background: var(--bg-surface); border:1px solid var(--border-subtle); border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xs); padding: 4px var(--space-5); margin-bottom: var(--space-5); }
+  .setting { display:flex; align-items:center; justify-content:space-between; gap:16px; padding: 14px 0;
+    min-height: var(--tap-min); border-bottom:1px solid var(--border-subtle); }
+  .setting:last-child { border-bottom:none; }
+  .setting .txt { display:flex; flex-direction:column; gap:2px; }
+  .setting .txt .t { font-size: var(--fs-body); font-weight:600; }
+  .setting .txt .d { font-size: var(--fs-caption); color: var(--text-tertiary); }
+  .switch { flex-shrink:0; width:52px; height:32px; border-radius: var(--radius-pill); border:none; padding:3px;
+    background: var(--border-strong); cursor:pointer; transition: background .2s; }
+  .switch.on { background: var(--accent); }
+  .switch .knob { display:block; width:26px; height:26px; border-radius:50%; background:#fff; box-shadow: var(--shadow-sm);
+    transition: transform .2s; }
+  .switch.on .knob { transform: translateX(20px); }
+  .mini-seg { display:flex; gap:2px; padding:3px; background: var(--bg-sunken); border-radius: var(--radius-sm); }
+  .mini-seg button { border:none; background:transparent; cursor:pointer; padding:6px 12px; border-radius: calc(var(--radius-sm) - 2px);
+    font-family:inherit; font-weight:700; font-size: var(--fs-caption); color: var(--text-secondary); min-height: 34px; }
+  .mini-seg button.on { background: var(--bg-surface); color: var(--text-primary); box-shadow: var(--shadow-xs); }
+
+  /* Bottom nav */
+  .tabbar { position:absolute; bottom:0; left:0; right:0; height: calc(72px + var(--safe-bottom));
+    background: var(--bg-surface); border-top:1px solid var(--border-subtle);
+    display:flex; align-items:flex-start; padding-top: 8px; z-index:50; }
+  .tab { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; cursor:pointer;
+    color: var(--text-tertiary); font-family:inherit; font-size:10px; font-weight:700; padding-top:6px; min-height:56px; }
+  .tab svg { width:24px; height:24px; }
+  .tab.on { color: var(--accent); }
+  .fab { flex:0 0 auto; width:56px; height:56px; margin: -18px 8px 0; border-radius: var(--radius-lg);
+    background: var(--accent); color: var(--text-on-accent); border:none; cursor:pointer; box-shadow: var(--shadow-md);
+    display:flex; align-items:center; justify-content:center; }
+  .fab svg { width:26px; height:26px; }
+
+  .caption-note { text-align:center; font-size:13px; color: var(--text-secondary); max-width:220px; }
+  .panel { flex-shrink:0; }
+  @media (max-width: 760px){ body{flex-direction:column} }
+</style>
+</head>
+<body>
+
+<div class="phone" id="phone">
+  <div class="notch"></div>
+  <div class="statusbar">
+    <span>9:41</span>
+    <span class="icons"><i data-lucide="signal"></i><i data-lucide="wifi"></i><i data-lucide="battery-full"></i></span>
+  </div>
+
+  <div class="screen-scroll" id="scroll">
+
+    <!-- ============ DASHBOARD ============ -->
+    <section class="screen active" id="s-home">
+      <div class="app-header">
+        <div>
+          <div class="greeting">Good morning, Alex</div>
+          <div class="app-title">Your subscriptions</div>
+        </div>
+        <button class="icon-btn soft" aria-label="Notifications"><i data-lucide="bell"></i></button>
+      </div>
+
+      <div class="hero-card">
+        <div class="ring"></div><div class="ring2"></div>
+        <div class="hero-label">Total this month</div>
+        <div class="hero-amount" id="hero-total">$142.97</div>
+        <div class="hero-sub" id="hero-sub">across 9 active subscriptions · $1,715/yr</div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat">
+          <div class="k"><i data-lucide="calendar-clock"></i>Upcoming</div>
+          <div class="v" id="stat-upcoming">3</div>
+          <div class="s">renewals in 7 days</div>
+        </div>
+        <div class="stat">
+          <div class="k"><i data-lucide="trending-up"></i>vs last month</div>
+          <div class="v" id="stat-delta" style="color:var(--warning-fg)">+$8.50</div>
+          <div class="s">Disney+ price rise</div>
+        </div>
+      </div>
+
+      <div class="section-head"><h2>Renewing soon</h2><a href="#" onclick="go('upcoming');return false">See all</a></div>
+      <div class="list-card" id="soon-list"></div>
+
+      <div class="section-head"><h2>All subscriptions</h2><a href="#">Sort</a></div>
+      <div class="list-card" id="all-list"></div>
+    </section>
+
+    <!-- ============ UPCOMING ============ -->
+    <section class="screen" id="s-upcoming">
+      <div class="app-header"><div><div class="greeting">Next 30 days</div><div class="app-title">Upcoming charges</div></div></div>
+      <div class="seg" id="up-seg">
+        <button class="on" data-f="week">This week</button>
+        <button data-f="month">This month</button>
+        <button data-f="all">All</button>
+      </div>
+      <div id="timeline"></div>
+    </section>
+
+    <!-- ============ ADD ============ -->
+    <section class="screen" id="s-add">
+      <div class="app-header"><div><div class="greeting">New subscription</div><div class="app-title">Add subscription</div></div>
+        <button class="icon-btn" aria-label="Close" onclick="go('home')"><i data-lucide="x"></i></button></div>
+      <div class="field"><label for="f-name">Name</label>
+        <div class="input"><i data-lucide="tag" style="width:18px;color:var(--text-tertiary)"></i><input id="f-name" placeholder="e.g. Netflix"></div></div>
+      <div style="display:grid;grid-template-columns:0.72fr 1.28fr;gap:12px">
+        <div class="field" style="min-width:0"><label for="f-price">Price</label>
+          <div class="input" style="padding:0 10px"><span class="prefix" id="add-cur">$</span><input id="f-price" type="number" placeholder="0.00" style="min-width:0"></div></div>
+        <div class="field" style="min-width:0"><label>Billing</label>
+          <div class="seg" style="margin:0;min-width:0" id="cad-seg"><button class="on" data-c="mo">Monthly</button><button data-c="yr">Yearly</button></div></div>
+      </div>
+      <div class="field"><label>Category</label>
+        <div class="cat-grid" id="cat-grid">
+          <button class="cat on" data-cat="Entertainment"><i data-lucide="clapperboard"></i>Fun</button>
+          <button class="cat" data-cat="Music"><i data-lucide="music"></i>Music</button>
+          <button class="cat" data-cat="Productivity"><i data-lucide="briefcase"></i>Work</button>
+          <button class="cat" data-cat="Storage"><i data-lucide="cloud"></i>Cloud</button>
+          <button class="cat" data-cat="Fitness"><i data-lucide="dumbbell"></i>Fitness</button>
+          <button class="cat" data-cat="News"><i data-lucide="newspaper"></i>News</button>
+          <button class="cat" data-cat="Gaming"><i data-lucide="gamepad-2"></i>Gaming</button>
+          <button class="cat" data-cat="Other"><i data-lucide="more-horizontal"></i>Other</button>
+        </div></div>
+      <div class="field"><label for="f-date">First billing date</label>
+        <div class="input"><i data-lucide="calendar" style="width:18px;color:var(--text-tertiary)"></i><input id="f-date" type="date"></div></div>
+      <div class="setting-group" style="margin-bottom:24px">
+        <div class="setting" style="border:none">
+          <div class="txt"><span class="t">Remind me before renewal</span><span class="d">Get an alert 3 days ahead</span></div>
+          <button class="switch on" onclick="this.classList.toggle('on')" role="switch" aria-label="Remind before renewal"><span class="knob"></span></button>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="go('home')"><i data-lucide="check"></i>Add subscription</button>
+    </section>
+
+    <!-- ============ ALERTS ============ -->
+    <section class="screen" id="s-alerts">
+      <div class="app-header"><div><div class="greeting">Stay ahead of charges</div><div class="app-title">Reminders</div></div></div>
+      <div id="alerts-list"></div>
+    </section>
+
+    <!-- ============ SETTINGS / ACCESSIBILITY ============ -->
+    <section class="screen" id="s-settings">
+      <div class="app-header"><div><div class="greeting">Make Tally yours</div><div class="app-title">Accessibility</div></div></div>
+
+      <div class="day-label">Appearance</div>
+      <div class="setting-group">
+        <div class="setting">
+          <div class="txt"><span class="t">Dark mode</span><span class="d">Easier on the eyes at night</span></div>
+          <button class="switch" data-attr="data-theme" data-on="dark" role="switch" aria-label="Dark mode"><span class="knob"></span></button>
+        </div>
+        <div class="setting">
+          <div class="txt"><span class="t">High contrast</span><span class="d">Stronger text & borders (WCAG AAA)</span></div>
+          <button class="switch" data-attr="data-contrast" data-on="high" role="switch" aria-label="High contrast"><span class="knob"></span></button>
+        </div>
+      </div>
+
+      <div class="day-label">Regional</div>
+      <div class="setting-group">
+        <div class="setting" style="border:none">
+          <div class="txt"><span class="t">Currency</span><span class="d">Shown across all amounts</span></div>
+          <div class="input" style="min-height:40px;padding:0 8px 0 12px;max-width:160px">
+            <select id="cur-select" aria-label="Currency"></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="day-label">Text &amp; touch</div>
+      <div class="setting-group">
+        <div class="setting">
+          <div class="txt"><span class="t">Text size</span><span class="d">Dynamic Type scaling</span></div>
+          <div class="mini-seg" id="size-seg">
+            <button data-size="" class="on">A</button>
+            <button data-size="large" style="font-size:15px">A+</button>
+            <button data-size="x-large" style="font-size:18px">A++</button>
+          </div>
+        </div>
+        <div class="setting">
+          <div class="txt"><span class="t">Larger tap targets</span><span class="d">Bigger buttons & rows (52px)</span></div>
+          <button class="switch" data-attr="data-tap" data-on="large" role="switch" aria-label="Larger tap targets"><span class="knob"></span></button>
+        </div>
+        <div class="setting">
+          <div class="txt"><span class="t">Bold text</span><span class="d">Heavier weight throughout</span></div>
+          <button class="switch" data-attr="data-bold" data-on="1" role="switch" aria-label="Bold text"><span class="knob"></span></button>
+        </div>
+      </div>
+
+      <div class="day-label">Motion &amp; vision</div>
+      <div class="setting-group">
+        <div class="setting">
+          <div class="txt"><span class="t">Reduce motion</span><span class="d">Minimise animations</span></div>
+          <button class="switch" data-attr="data-motion" data-on="reduced" role="switch" aria-label="Reduce motion"><span class="knob"></span></button>
+        </div>
+        <div class="setting" style="border:none">
+          <div class="txt"><span class="t">Colorblind-safe labels</span><span class="d">Always show icons with status colors</span></div>
+          <button class="switch on" role="switch" aria-label="Colorblind-safe labels" onclick="this.classList.toggle('on')"><span class="knob"></span></button>
+        </div>
+      </div>
+      <p class="caption-note" style="margin:0 auto;max-width:100%">Every setting updates the whole app instantly — try Dark mode or Text size and watch the screens respond.</p>
+    </section>
+
+  </div>
+
+  <!-- Bottom nav -->
+  <nav class="tabbar">
+    <button class="tab on" data-tab="home" onclick="go('home')"><i data-lucide="home"></i>Home</button>
+    <button class="tab" data-tab="upcoming" onclick="go('upcoming')"><i data-lucide="calendar-clock"></i>Upcoming</button>
+    <button class="fab" aria-label="Add subscription" onclick="go('add')"><i data-lucide="plus"></i></button>
+    <button class="tab" data-tab="alerts" onclick="go('alerts')"><i data-lucide="bell"></i>Alerts</button>
+    <button class="tab" data-tab="settings" onclick="go('settings')"><i data-lucide="settings-2"></i>Settings</button>
+  </nav>
+
+  <!-- Edit subscription bottom sheet -->
+  <div class="sheet-scrim" id="edit-scrim">
+    <div class="sheet" role="dialog" aria-modal="true" aria-label="Edit subscription">
+      <div class="sheet-grabber"></div>
+      <div class="sheet-head">
+        <span class="mono" id="e-mono" style="background:var(--accent-soft);color:var(--accent-soft-fg)"></span>
+        <span class="title" id="e-title">Edit</span>
+        <button class="icon-btn" aria-label="Close" onclick="closeEdit()"><i data-lucide="x"></i></button>
+      </div>
+      <div class="field"><label for="e-name">Name</label>
+        <div class="input"><i data-lucide="tag" style="width:18px;color:var(--text-tertiary)"></i><input id="e-name"></div></div>
+      <div style="display:grid;grid-template-columns:0.72fr 1.28fr;gap:12px">
+        <div class="field" style="min-width:0"><label for="e-price">Price</label>
+          <div class="input" style="padding:0 10px"><span class="prefix" id="e-cur">$</span><input id="e-price" type="number" style="min-width:0"></div></div>
+        <div class="field" style="min-width:0"><label for="e-cat">Category</label>
+          <div class="input"><select id="e-cat"></select></div></div>
+      </div>
+      <div class="field"><label for="e-due">Next charge</label>
+        <div class="input"><i data-lucide="calendar-clock" style="width:18px;color:var(--text-tertiary)"></i><input id="e-due" placeholder="e.g. in 3 days"></div></div>
+      <div class="field"><label>Status</label>
+        <div class="status-grid" id="e-status"></div></div>
+      <div style="display:flex;gap:10px;margin-top:var(--space-4)">
+        <button class="btn" style="background:var(--danger-bg);color:var(--danger-fg);flex:0 0 auto;width:auto;padding:0 20px" onclick="deleteFromSheet()"><i data-lucide="trash-2"></i></button>
+        <button class="btn btn-primary" style="flex:1" onclick="saveEdit()"><i data-lucide="check"></i>Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <p class="caption-note">Tap the tabs and the <b>+</b> to move around. Open <b>Settings</b> to toggle dark mode, high contrast, text size, tap targets and reduced motion — they all apply live.</p>
+</div>
+
+<script>
+const phone = document.getElementById('phone');
+
+// ---- data ----
+const tint = {
+  Entertainment: ['var(--danger-bg)','var(--danger-fg)'],
+  Music: ['var(--success-bg)','var(--success-fg)'],
+  Storage: ['var(--info-bg)','var(--info-fg)'],
+  Productivity: ['var(--accent-soft)','var(--accent-soft-fg)'],
+  Fitness: ['var(--warning-bg)','var(--warning-fg)'],
+  News: ['var(--bg-sunken)','var(--text-secondary)'],
+};
+const badge = {
+  active:  ['var(--success-bg)','var(--success-fg)','check','Active'],
+  due:     ['var(--warning-bg)','var(--warning-fg)','circle','Due'],
+  overdue: ['var(--danger-bg)','var(--danger-fg)','alert-triangle','Overdue'],
+  paused:  ['var(--info-bg)','var(--info-fg)','pause','Paused'],
+  trial:   ['var(--accent-soft)','var(--accent-soft-fg)','star','Trial'],
+};
+const CURRENCIES = [
+  ['USD','$',2],['EUR','€',2],['GBP','£',2],['JPY','¥',0],['CNY','¥',2],['INR','₹',2],
+  ['CAD','C$',2],['AUD','A$',2],['CHF','CHF ',2],['BRL','R$',2],['MXN','$',2],['ZAR','R ',2],
+  ['SGD','S$',2],['HKD','HK$',2],['NZD','NZ$',2],['SEK','kr ',2],['NOK','kr ',2],['DKK','kr ',2],
+  ['KRW','₩',0],['RUB','₽',2],['TRY','₺',2],['AED','AED ',2],['SAR','SAR ',2],['PLN','zł ',2],
+  ['THB','฿',2],['IDR','Rp ',0],['PHP','₱',2],['MYR','RM',2],['NGN','₦',2],
+];
+let cur = CURRENCIES[0];
+function money(n){ const d = cur[2]; return cur[1] + Number(n).toLocaleString(undefined, {minimumFractionDigits:d, maximumFractionDigits:d}); }
+
+let uid = 0;
+let subs = [
+  {id:++uid, n:'Netflix', m:'N', cat:'Entertainment', p:15.49, due:'in 3 days', st:'due', days:3},
+  {id:++uid, n:'Spotify', m:'S', cat:'Music', p:11.99, due:'in 5 days', st:'due', days:5},
+  {id:++uid, n:'iCloud+', m:'i', cat:'Storage', p:2.99, due:'in 6 days', st:'due', days:6},
+  {id:++uid, n:'Notion', m:'N', cat:'Productivity', p:8, due:'in 12 days', st:'active', days:12},
+  {id:++uid, n:'Disney+', m:'D', cat:'Entertainment', p:13.99, due:'in 14 days', st:'active', days:14},
+  {id:++uid, n:'Peloton', m:'P', cat:'Fitness', p:24, due:'paused', st:'paused', days:99},
+  {id:++uid, n:'NYT', m:'T', cat:'News', p:4.25, due:'in 21 days', st:'active', days:21},
+  {id:++uid, n:'YouTube Premium', m:'Y', cat:'Entertainment', p:13.99, due:'in 23 days', st:'active', days:23},
+  {id:++uid, n:'ChatGPT', m:'C', cat:'Productivity', p:20, due:'trial ends in 2d', st:'trial', days:2},
+];
+const CATS = ['Entertainment','Music','Storage','Productivity','Fitness','News','Gaming','Other'];
+
+function pill(st){
+  const [bg,fg,ic,lbl] = badge[st];
+  return `<span class="pill" style="background:${bg};color:${fg}"><i data-lucide="${ic}"></i>${lbl}</span>`;
+}
+function row(s, showBadge, del){
+  const [bg,fg] = tint[s.cat] || ['var(--accent-soft)','var(--accent-soft-fg)'];
+  return `<div class="sub-row" role="button" tabindex="0" aria-label="Edit ${s.n}" onclick="openEdit(${s.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEdit(${s.id})}">
+    <span class="mono" style="background:${bg};color:${fg}">${s.m}</span>
+    <span class="sub-mid">
+      <span class="sub-name-line"><span class="sub-name">${s.n}</span>${showBadge?pill(s.st):''}</span>
+      <span class="sub-cat">${s.cat} · ${s.due}</span>
+    </span>
+    <span class="sub-amt"><b>${money(s.p)}</b><span>/mo</span></span>
+    ${del?`<button class="del-btn" aria-label="Delete ${s.n}" onclick="event.stopPropagation();deleteSub(${s.id})"><i data-lucide="trash-2"></i></button>`:''}
+  </div>`;
+}
+
+let currentFilter = 'week';
+function renderLists(){
+  document.getElementById('soon-list').innerHTML = subs.filter(s=>s.days<=6).map(s=>row(s,true,false)).join('') || `<p class="caption-note" style="margin:16px auto">No renewals in the next week 🎉</p>`;
+  document.getElementById('all-list').innerHTML = subs.map(s=>row(s,false,true)).join('') || `<p class="caption-note" style="margin:16px auto">No subscriptions yet — tap + to add one.</p>`;
+}
+function renderTimeline(filter){
+  currentFilter = filter;
+  let list = subs.filter(s=>s.st!=='paused');
+  if(filter==='week') list = list.filter(s=>s.days<=7);
+  else if(filter==='month') list = list.filter(s=>s.days<=30);
+  list = [...list].sort((a,b)=>a.days-b.days);
+  const groups = {};
+  list.forEach(s=>{ const k = s.days<=7?'This week':(s.days<=14?'Next week':'Later this month'); (groups[k]=groups[k]||[]).push(s); });
+  document.getElementById('timeline').innerHTML = Object.entries(groups).map(([k,arr])=>`
+    <div class="day-group"><div class="day-label">${k}</div>
+      <div class="list-card">${arr.map(s=>row(s,true,true)).join('')}</div></div>`).join('') || `<p class="caption-note" style="margin:20px auto">Nothing charging in this window 🎉</p>`;
+}
+function renderSummary(){
+  const monthly = subs.filter(s=>s.st!=='paused').reduce((t,s)=>t+s.p,0);
+  const activeCount = subs.filter(s=>s.st!=='paused').length;
+  document.getElementById('hero-total').textContent = money(monthly);
+  document.getElementById('hero-sub').textContent = `across ${activeCount} active subscriptions · ${money(monthly*12)}/yr`;
+  document.getElementById('stat-upcoming').textContent = subs.filter(s=>s.st!=='paused' && s.days<=7).length;
+  document.getElementById('stat-delta').textContent = '+'+money(8.5);
+}
+
+const alerts = [
+  {n:'Netflix', when:'Renews in 3 days · Feb 14', p:15.49, on:true, ic:'clapperboard'},
+  {n:'Spotify', when:'Renews in 5 days · Feb 16', p:11.99, on:true, ic:'music'},
+  {n:'ChatGPT trial', when:'Trial ends in 2 days · Feb 13', p:20, pre:'then ', on:true, ic:'sparkles'},
+  {n:'Disney+', when:'Renews in 14 days · Feb 25', p:13.99, on:false, ic:'clapperboard'},
+];
+function renderAlerts(){
+  document.getElementById('alerts-list').innerHTML = `<div class="setting-group">` + alerts.map(a=>`
+    <div class="setting">
+      <div style="display:flex;gap:12px;align-items:center">
+        <span class="mono" style="background:var(--accent-soft);color:var(--accent-soft-fg);width:40px;height:40px"><i data-lucide="${a.ic}" style="width:20px"></i></span>
+        <div class="txt"><span class="t">${a.n}</span><span class="d">${a.when} · ${a.pre||''}${money(a.p)}</span></div>
+      </div>
+      <button class="switch ${a.on?'on':''}" role="switch" aria-label="Reminder for ${a.n}" onclick="this.classList.toggle('on')"><span class="knob"></span></button>
+    </div>`).join('') + `</div>
+    <p class="caption-note" style="margin:8px auto 0">You'll get a push notification 3 days before each renewal.</p>`;
+}
+
+function deleteSub(id){ subs = subs.filter(s=>s.id!==id); renderAll(); }
+window.deleteSub = deleteSub;
+
+// ---- Edit bottom sheet ----
+let editingId = null;
+function buildStatusOpts(cur){
+  return Object.entries(badge).map(([k,[bg,fg,ic,lbl]])=>
+    `<button type="button" class="status-opt ${k===cur?'on':''}" data-st="${k}" onclick="pickStatus('${k}')"><i data-lucide="${ic}"></i>${lbl}</button>`
+  ).join('');
+}
+function openEdit(id){
+  const s = subs.find(x=>x.id===id); if(!s) return;
+  editingId = id;
+  const [bg,fg] = tint[s.cat] || ['var(--accent-soft)','var(--accent-soft-fg)'];
+  const mono = document.getElementById('e-mono'); mono.textContent = s.m; mono.style.background = bg; mono.style.color = fg;
+  document.getElementById('e-title').textContent = s.n;
+  document.getElementById('e-name').value = s.n;
+  document.getElementById('e-price').value = s.p;
+  document.getElementById('e-cur').textContent = cur[1].trim();
+  document.getElementById('e-due').value = s.due;
+  const catSel = document.getElementById('e-cat');
+  catSel.innerHTML = CATS.map(c=>`<option ${c===s.cat?'selected':''}>${c}</option>`).join('');
+  document.getElementById('e-status').innerHTML = buildStatusOpts(s.st);
+  document.getElementById('edit-scrim').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function pickStatus(st){
+  document.querySelectorAll('#e-status .status-opt').forEach(b=>b.classList.toggle('on', b.dataset.st===st));
+}
+function closeEdit(){ document.getElementById('edit-scrim').classList.remove('open'); editingId = null; }
+function deleteFromSheet(){ if(editingId!=null){ const id=editingId; closeEdit(); deleteSub(id); } }
+function saveEdit(){
+  const s = subs.find(x=>x.id===editingId); if(!s) return;
+  const name = document.getElementById('e-name').value.trim() || s.n;
+  s.n = name; s.m = name[0].toUpperCase();
+  s.p = parseFloat(document.getElementById('e-price').value) || 0;
+  s.cat = document.getElementById('e-cat').value;
+  s.due = document.getElementById('e-due').value.trim() || s.due;
+  const on = document.querySelector('#e-status .status-opt.on'); if(on) s.st = on.dataset.st;
+  const m = /in (\d+) day/.exec(s.due); if(m) s.days = +m[1]; else if(/trial ends in (\d+)d/.test(s.due)) s.days = +RegExp.$1; else if(s.st==='paused') s.days = 99;
+  closeEdit(); renderAll();
+}
+window.openEdit = openEdit; window.pickStatus = pickStatus; window.closeEdit = closeEdit;
+window.saveEdit = saveEdit; window.deleteFromSheet = deleteFromSheet;
+document.getElementById('edit-scrim').addEventListener('click', e=>{ if(e.target.id==='edit-scrim') closeEdit(); });
+
+function renderAll(){
+  renderLists(); renderTimeline(currentFilter); renderSummary(); renderAlerts();
+  if(window.lucide) lucide.createIcons();
+}
+
+// currency selector
+(function(){
+  const sel = document.getElementById('cur-select');
+  sel.innerHTML = CURRENCIES.map((c,i)=>`<option value="${i}">${c[0]} · ${c[1].trim()}</option>`).join('');
+  sel.value = '0';
+  sel.onchange = ()=>{ cur = CURRENCIES[+sel.value]; const a = document.getElementById('add-cur'); if(a) a.textContent = cur[1].trim(); renderAll(); };
+})();
+
+renderAll();
+document.querySelectorAll('#up-seg button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#up-seg button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); renderTimeline(b.dataset.f); if(window.lucide) lucide.createIcons();
+});
+
+// nav
+function go(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-'+name).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on', t.dataset.tab===name));
+  document.getElementById('scroll').scrollTop = 0;
+  if(window.lucide) lucide.createIcons();
+}
+window.go = go;
+
+// category + cadence pickers
+document.querySelectorAll('#cat-grid .cat').forEach(c=>c.onclick=()=>{ document.querySelectorAll('#cat-grid .cat').forEach(x=>x.classList.remove('on')); c.classList.add('on'); });
+document.querySelectorAll('#cad-seg button').forEach(b=>b.onclick=()=>{ document.querySelectorAll('#cad-seg button').forEach(x=>x.classList.remove('on')); b.classList.add('on'); });
+
+// accessibility toggles -> set data attrs on phone
+document.querySelectorAll('.switch[data-attr]').forEach(sw=>{
+  sw.onclick=()=>{
+    const on = !sw.classList.contains('on');
+    sw.classList.toggle('on', on);
+    if(sw.dataset.attr==='data-bold'){ phone.style.setProperty('--fw-regular', on?'600':'400'); phone.style.setProperty('--fw-medium', on?'700':'500');
+      document.querySelectorAll('#phone, #phone *').forEach(()=>{}); phone.style.fontWeight = on?'500':''; return; }
+    if(on) phone.setAttribute(sw.dataset.attr, sw.dataset.on); else phone.removeAttribute(sw.dataset.attr);
+  };
+});
+document.querySelectorAll('#size-seg button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#size-seg button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  if(b.dataset.size) phone.setAttribute('data-text-size', b.dataset.size); else phone.removeAttribute('data-text-size');
+});
+
+if(window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

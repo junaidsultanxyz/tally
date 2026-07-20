@@ -1,5 +1,4 @@
-# Tally
-
+# Tally - Subscription Management App
 Tally is an offline-first subscription manager, built with Kotlin Multiplatform and Compose
 Multiplatform, targeting Android (primary) and iOS.
 
@@ -11,15 +10,20 @@ to cached or no conversion when it can't.
 
 - **Dashboard** — this month's total (cadence-normalized: yearly subscriptions contribute
   price ÷ 12, not the naive sticker price), annual total, active count, renewing-soon list,
-  and a sortable list of every subscription.
+  and a sortable list of every subscription.<img width="1260" height="1804" alt="Screenshot_20260720_152216" src="https://github.com/user-attachments/assets/d6cfa861-273e-4d28-a535-c1328f224cb6" />
+
+
 - **Upcoming** — a 7/30-day/all-time filtered, bucketed view of what's charging next.
-- **Add / Edit** — full CRUD with a category grid, billing-cadence toggle, and a real date
+- **Add / Edit** — full CRUD with a category grid, billing-cadence toggle, and a real date<img width="1260" height="2463" alt="Screenshot_20260720_152247" src="https://github.com/user-attachments/assets/b468b622-41e2-41fa-899b-af9c2d4e82a7" />
+
   picker (not free-text parsing). Editing autosaves as you go.
 - **Alerts** — every non-paused subscription's reminder, toggleable inline, with a "renews in
-  N days · absolute date · amount" line per row.
+  N days · absolute date · amount" line per row.<img width="1260" height="2459" alt="Screenshot_20260720_1522awd" src="https://github.com/user-attachments/assets/f53b6fe9-69c8-438c-ad1b-2cd7abecf2d5" />
+
 - **Settings** — dark mode (with a "follow system" default), high contrast, text size, larger
   tap targets, bold text, reduced motion, colorblind-safe labels, currency, and default
-  reminder lead time/time-of-day. Every toggle applies live, app-wide.
+  reminder lead time/time-of-day. Every toggle applies live, app-wide.<img width="1260" height="2455" alt="Screenshot_20260720_152331" src="https://github.com/user-attachments/assets/42ed28b4-7192-4168-b90b-df426623d3fa" />
+
 - **Currency conversion** — subscriptions billed in a currency other than your active one are
   converted into it for the dashboard totals, using a cached exchange rate fetched over HTTPS.
   Offline or on a fetch failure, it falls back to the last cached rate (or excludes that
@@ -40,19 +44,17 @@ Android `minSdk` 26, `targetSdk`/`compileSdk` 37.
 
 ```
 composeApp/src/commonMain/kotlin/app/tally
-  ui/{theme,components,screens,nav}   Compose UI
-  domain/{model,usecase}              Pure business logic — money math, due-date derivation,
-                                       cadence normalization. No Compose/platform dependency.
-  data/{local,remote,settings,repository}  Room, DataStore, Ktor, and the repositories that
-                                       front them
-  platform                            expect declarations (Auth, Notifier, SecureStore, Locale,
-                                       DateFormatter) — actuals live in androidMain/iosMain
-  money                               Currency table, formatting, and parsing
-composeApp/src/androidMain/...        Android actuals (Credential Manager, WorkManager, Keystore)
-composeApp/src/iosMain/...            iOS actuals (Keychain, NSDateFormatter, ...)
-androidApp/                           Android entry point, manifest
-iosApp/                               Xcode project, entry point
-release/                              Built APKs
+├── ui/{theme,components,screens,nav}         # Compose UI
+├── domain/{model,usecase}                    # Pure business logic (no Compose/platform deps)
+├── data/{local,remote,settings,repository}   # Room, DataStore, Ktor + repositories
+├── platform                                  # expect decls; actuals in androidMain/iosMain
+└── money                                     # Currency table, formatting, parsing
+
+composeApp/src/androidMain/...   # Android actuals (Credential Manager, WorkManager, Keystore)
+composeApp/src/iosMain/...       # iOS actuals (Keychain, NSDateFormatter, ...)
+androidApp/                      # Android entry point, manifest
+iosApp/                          # Xcode project, entry point
+release/                         # Built APKs
 ```
 
 ## Building and running

@@ -1,0 +1,21 @@
+.gradle/
+build/
+*/build/
+.kotlin/
+local.properties
+.idea/
+*.iml
+.DS_Store
+captures/
+.cxx/
+*.hprof
+
+# iOS / Xcode
+iosApp/**/*.xcuserstate
+iosApp/**/xcuserdata/
+iosApp/**/DerivedData/
+
+# Internal planning/spec docs and dev screenshots stay local, not in git.
+*.md
+!/README.md
+screenshot-*.png

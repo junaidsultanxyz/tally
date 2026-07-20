@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Bridge theme only — real theming lives in AppTheme.kt (Phase 0.2),
+         driven by the design system tokens, not this file. -->
+    <style name="Theme.Tally" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>
